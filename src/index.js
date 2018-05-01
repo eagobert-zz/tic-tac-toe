@@ -4,23 +4,30 @@ import './index.css';
 
 
 class Square extends React.Component {
+
+  // Below I changed Square's render method to show the square value by using (Example: {this.props.value})
     render() {
       return (
         <button className="square">
-          {/* TODO */}
+          {this.props.value}
         </button>
       );
     }
   }
   
   class Board extends React.Component {
+
+    // Below I changed Board's renderSquare method to pass (return) a value prop to the square (Example: value={i}). 
+
     renderSquare(i) {
-      return <Square />;
+      return <Square value={i} />;
     }
   
     render() {
       const status = 'Next player: X';
-  
+
+    // The renderSquare method defined in the board class and used below passes the value indicated into the individual squares (Example: {this.renderSquare(0)}).
+
       return (
         <div>
           <div className="status">{status}</div>
