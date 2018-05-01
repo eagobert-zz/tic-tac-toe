@@ -5,11 +5,22 @@ import './index.css';
 
 class Square extends React.Component {
 
-  // Below I changed Square's render method to show the square value by using (Example: {this.props.value})
+  //Create a constructor to store the value of the square's current state which is "null".
+  constructor(props){
+    super(props);
+    this.state = {
+      value: null,
+    };
+  }
+
+  // Below I changed Square's render method to show the square's state value by using (Example: {this.state.value})
+
     render() {
       return (
-        <button className="square">
-          {this.props.value}
+
+        //Passing a function as the onClick prop.  onClick of the square the button state will change.
+        <button className="square" onClick={() => this.setState({value: 'X'})}>
+          {this.state.value}
         </button>
       );
     }
