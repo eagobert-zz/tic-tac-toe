@@ -2,25 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-
+//Note: The square class is a controlled component, because it does not keep it's own state.  It receives its' value from the parent (the Board class)
 class Square extends React.Component {
-
-  //Create a constructor to store the value of the square's current state which is "null".
-  constructor(props){
-    super(props);
-    this.state = {
-      value: null,
-    };
-  }
 
   // Below I changed Square's render method to show the square's state value by using (Example: {this.state.value})
 
     render() {
       return (
 
-        //Passing a function as the onClick prop.  onClick of the square the button state will change.
-        <button className="square" onClick={() => this.setState({value: 'X'})}>
-          {this.state.value}
+        //When a square is clicked it calls the onClick event handler that was defined in the Board's render() method.
+        <button className="square" onClick={() => this.props.onClick()}>
+          {this.props.value}
         </button>
       );
     }
@@ -28,10 +20,30 @@ class Square extends React.Component {
   
   class Board extends React.Component {
 
-    // Below I changed Board's renderSquare method to pass (return) a value prop to the square (Example: value={i}). 
+    //Create a constructor that sets an initial state of the board's nine squares and fills with a value = null.
+
+    constructor(props){
+      super(props);
+      this.state = {
+        squares: Array(9).fill(null),
+      };
+    }
+
+    //method defined in Board's renderSquare method.  The onClick event handler is passed to the square class
+
+    handleClick(i){
+      const squares = this.state.squares.slice();
+      squares[i] = 'X';
+      this.setState({squares: squares});
+    }
+
+    // Below Board's renderSquare method passes a value prop (parameter)to the square's array index position (Example: value={this.state.squares[i]}) AND a event handler function called when a square is clicked. 
 
     renderSquare(i) {
-      return <Square value={i} />;
+      return (<Square value={this.state.squares[i]}
+      onClick={() => this.handleClick(i)} 
+      />
+      );
     }
   
     render() {
