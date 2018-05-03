@@ -17,21 +17,29 @@ function Square(props) {
   
   class Board extends React.Component {
 
-    //Create a constructor that sets an initial state of the board's nine squares and fills with a value = null.
+    //Create a constructor that sets an initial state of the board's nine squares and fills with a value = null.  It also sets the turn state to 'X'
 
     constructor(props){
       super(props);
       this.state = {
         squares: Array(9).fill(null),
+        xIsNext: true,
       };
     }
 
-    //method defined in Board's renderSquare method.  The onClick event handler is passed to the square class
+    //method defined in Board's renderSquare method.  The onClick event handler is passed to the square class as well as setting a new turn state
 
     handleClick(i){
       const squares = this.state.squares.slice();
-      squares[i] = 'X';
-      this.setState({squares: squares});
+      if(calculateWinner(squares) || squares[i]){
+        return;
+      }
+      squares[i] = this.state.xIsNext ? 'X' : 'O';
+      
+      this.setState({
+        squares: squares,
+        xIsNext: !this.state.xIsNext,
+      });
     }
 
     // Below Board's renderSquare method passes a value prop (parameter)to the square's array index position (Example: value={this.state.squares[i]}) AND a event handler function called when a square is clicked. 
@@ -43,8 +51,16 @@ function Square(props) {
       );
     }
   
+    //The Board class's render changes the status based upon the who is the winner or whether "X" is next or not
+
     render() {
-      const status = 'Next player: X';
+      const winner = calculateWinner(this.state.squares);
+      let status;
+      if(winner){
+        status = 'Winner: ' + winner;
+      } else {
+        status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+      }
 
     // The renderSquare method defined in the board class and used below passes the value indicated into the individual squares (Example: {this.renderSquare(0)}).
 
@@ -85,6 +101,26 @@ function Square(props) {
         </div>
       );
     }
+  }
+
+  function calculateWinner(squares) {
+    const lines = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6],
+    ];
+    for (let i = 0; i < lines.length; i++) {
+      const [a, b, c] = lines[i];
+      if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+        return squares[a];
+      }
+    }
+    return null;
   }
   
   // ========================================
