@@ -3,19 +3,16 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 //Note: The square class is a controlled component, because it does not keep it's own state.  It receives its' value from the parent (the Board class)
-class Square extends React.Component {
 
-  // Below I changed Square's render method to show the square's state value by using (Example: {this.state.value})
+function Square(props) {
 
-    render() {
+  //When a square is clicked it calls the onClick event handler that is defined in the Board's render() method.
       return (
-
-        //When a square is clicked it calls the onClick event handler that was defined in the Board's render() method.
-        <button className="square" onClick={() => this.props.onClick()}>
-          {this.props.value}
+        <button className="square" onClick={props.onClick}>
+          {props.value}
         </button>
       );
-    }
+
   }
   
   class Board extends React.Component {
